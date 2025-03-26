@@ -1,6 +1,10 @@
 import { createContext } from "react";
-import { FetchContextType } from "./fetch.type";
+import { ContextOptions, FetchContextType } from "./fetch.type";
 
 export const FetchContext = createContext<FetchContextType>({
   url: '',
+  options: {
+    headers: {},
+  },
+  setContext: (context: ContextOptions) => context,
 });
