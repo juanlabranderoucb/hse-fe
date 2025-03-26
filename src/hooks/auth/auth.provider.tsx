@@ -1,5 +1,6 @@
 
 import { useState } from 'react';
+
 import { AuthProviderProps, User } from './auth.type';
 import { AuthContext } from './auth.context';
 
@@ -12,11 +13,17 @@ const guest: User = {
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [user, setUserData] = useState<User>(guest);
 
-  const login = (token: string) => localStorage.setItem('token', token);
+  const login = (token: string) => {
+    localStorage.setItem('token', token);
+    location.reload();
+  }
 
-  const logout = () => localStorage.removeItem('token');
+  const logout = () => {
+    localStorage.removeItem('token');
+    location.reload();
+  }
 
-  const setUser = (user: User) => setUserData(user)
+  const setUser = (user: User) => setUserData({ ...user, isAuthorized: Boolean(user.id) });
 
   return (
     <AuthContext.Provider value={{ user, login, logout, setUser }}>
