@@ -2,13 +2,7 @@
 import { useState, useContext } from 'react';
 
 import { FetchContext } from './fetch.context';
-
-type FetchOptions<TResponse> = {
-  method: string;
-  onCompleted?: (data: TResponse) => void;
-  data?: object;
-  onError?: (error: object) => void;
-}
+import { FetchOptions } from './fetch.type';
 
 type FetchResult<TResponse> = {
   loading: boolean;
@@ -28,7 +22,8 @@ function useFetchProps<T>(to: string, options: FetchOptions<T>) {
 
   const url = client.url + to;
   const props = {
-    method: options.method || 'GET'
+    method: options.method || 'GET',
+    ...client.setContext(client.options),
   };
 
   const makeResult = async (response: Response) => {
@@ -69,28 +64,29 @@ function useFetch<T>(to: string, options: FetchOptions<T>) {
 
   const call = async (args?: FetchArgs) => {
     setResult({ ...result, loading: true });
-    const response = await fetch(params(args?.params), { ...props, body: args?.body ? JSON.stringify(args.body) : undefined });
+    const body = args?.body ? JSON.stringify(args.body) : undefined
+    const response = await fetch(params(args?.params), { ...props, body });
     const maked = await makeResult(response);
     setResult(maked.result);
     return maked.result;
   };
 
-  return [ call, result ];
+  return { call, result };
 }
 
-export function usePost<T>(to: string, options: FetchOptions<T>) {
+export function usePost<T>(to: string, options: Omit<FetchOptions<T>, 'method'>) {
   return useFetch(to, { ...options, method: 'POST' });
 }
 
-export function useGet<T>(to: string, options: FetchOptions<T>) {
+export function useGet<T>(to: string, options: Omit<FetchOptions<T>, 'method'>) {
   return useFetch(to, { ...options, method: 'GET' });
 }
 
-export function usePut<T>(to: string, options: FetchOptions<T>) {
+export function usePut<T>(to: string, options: Omit<FetchOptions<T>, 'method'>) {
   return useFetch(to, { ...options, method: 'PUT' });
 }
 
-export function useDelete<T>(to: string, options: FetchOptions<T>) {
+export function useDelete<T>(to: string, options: Omit<FetchOptions<T>, 'method'>) {
   return useFetch(to, { ...options, method: 'DELETE' });
 }
 
@@ -100,7 +96,8 @@ export function useQuery<T>(to: string, options: FetchOptions<T>) {
   const { url, props, makeResult } = useFetchProps(to, options);
 
   const refetch = async () => {
-    const response = await fetch(url, { ...props, body: options.data ? JSON.stringify(options.data) : undefined });
+    const body = options.data ? JSON.stringify(options.data) : undefined
+    const response = await fetch(url, { ...props, body });
     const maked = await makeResult(response);
     setResult(maked.result);
     return maked.result;
