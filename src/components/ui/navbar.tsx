@@ -3,6 +3,7 @@ import {
   User as UserIcon,
   LogOut,
   Search,
+  HardHat
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -41,6 +42,17 @@ export function Navbar({ auth }: NavbarProps) {
               </Link>
             </Button>
           </nav>
+
+          {
+            user ? (<nav className="hidden md:flex items-center gap-1">
+              <Button variant="ghost" asChild>
+                <Link to="/rcs" className="flex items-center gap-1">
+                  <HardHat className="h-4 w-4" />
+                  RCS
+                </Link>
+              </Button>
+            </nav>) : null
+          }
         </div>
 
         <div className="hidden md:flex flex-1 max-w-md mx-4">
