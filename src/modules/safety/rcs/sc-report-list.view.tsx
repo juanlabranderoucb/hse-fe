@@ -1,18 +1,22 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ScReportCard } from "./sc-report-card.view";
-import { ScReport } from "./sc-report.type";
+import { ScReport, ScReportImpact } from "./sc-report.type";
 import { Plus } from "lucide-react";
 import { Separator } from "@radix-ui/react-dropdown-menu";
 import { ScReportNew } from "./sc-report-new.view";
 import { useQuery } from "@/hooks/fetch/fetch.hook";
+import { ScReportDeleteImpact } from "./sc-report-delete-impact.view";
+import { ScReportUpdateImpact } from "./sc-report-update-impact.view";
 
 export function ScReportList() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [updateImpact, setUpdateImpact] = useState<ScReportImpact | null>(null);
+  const [deleteImpact, setDeleteImpact] = useState<ScReportImpact | null>(null);
   const { data, refetch } = useQuery<Array<ScReport>>('/screports', { method: 'GET' });
 
   const handleNew = () => setIsDialogOpen(true)
-  const addNewReport = () => refetch()
+  const updateHandler = () => refetch()
   const reports: Array<ScReport> = data || []
 
   return (
@@ -34,13 +38,31 @@ export function ScReportList() {
       </div>
       <div className="flex flex-col items-center">
         {reports.map((report) => (
-          <ScReportCard key={report.id} report={report} />
+          <ScReportCard key={report.id} report={report}
+            updateHandler={updateHandler} updateImpact={setUpdateImpact} deleteImpact={setDeleteImpact}/>
         ))}
       </div>
       <ScReportNew
         open={isDialogOpen}
         onOpenChange={setIsDialogOpen}
-        onSubmit={addNewReport}/>
+        onSubmit={updateHandler}/>
+
+      {
+        updateImpact && <ScReportUpdateImpact
+          impact={updateImpact}
+          open={true}
+          onClose={() => setUpdateImpact(null)}
+          onSubmit={updateHandler}
+        />
+      }
+      {
+        deleteImpact && <ScReportDeleteImpact
+          impact={deleteImpact}
+          open={true}
+          onClose={() => setDeleteImpact(null)}
+          onSubmit={updateHandler}
+        />
+      }
     </>
   );
 }
