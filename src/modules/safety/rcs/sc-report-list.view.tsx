@@ -13,7 +13,7 @@ export function ScReportList() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [updateImpact, setUpdateImpact] = useState<ScReportImpact | null>(null);
   const [deleteImpact, setDeleteImpact] = useState<ScReportImpact | null>(null);
-  const { data, refetch } = useQuery<Array<ScReport>>('/screports', { method: 'GET' });
+  const { data, refetch } = useQuery<Array<ScReport>>('/substandard-conditions', { method: 'GET' });
 
   const handleNew = () => setIsDialogOpen(true)
   const updateHandler = () => refetch()

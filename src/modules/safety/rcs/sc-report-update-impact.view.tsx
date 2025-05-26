@@ -30,7 +30,7 @@ export function ScReportUpdateImpact({ impact, open, onClose, onSubmit }: ScRepo
     form.reset();
     onSubmit(data);
   }
-  const { call: post } = usePut(`/screports/impacts/${impact.id}`, { onCompleted });
+  const { call: post } = usePut(`/substandard-conditions/impacts/${impact.id}`, { onCompleted });
 
   const handleSubmit = (data: { description: string }) => post({ body: data })
 

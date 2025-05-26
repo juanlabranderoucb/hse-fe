@@ -19,7 +19,7 @@ export function ScReportDeleteImpact({ impact, open, onClose, onSubmit }: ScRepo
     form.reset();
     onSubmit(data);
   }
-  const { call: del } = useDelete(`/screports/impacts/${impact.id}`, { onCompleted });
+  const { call: del } = useDelete(`/substandard-conditions/impacts/${impact.id}`, { onCompleted });
   const handleSubmit = () => del()
 
   return (

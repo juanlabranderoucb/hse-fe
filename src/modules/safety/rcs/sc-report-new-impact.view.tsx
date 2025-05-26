@@ -30,7 +30,7 @@ export function ScReportNewImpact({ report, open, onOpenChange, onSubmit }: ScRe
     form.reset();
     onSubmit(data);
   }
-  const { call: post } = usePost('/screports/impacts', { onCompleted });
+  const { call: post } = usePost('/substandard-conditions/impacts', { onCompleted });
 
   const handleSubmit = (data: { description: string }) => post({ body: { substandardConditionReportId: report.id, ...data} })
 

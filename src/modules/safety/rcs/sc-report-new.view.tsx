@@ -31,7 +31,7 @@ export function ScReportNew({ open, onOpenChange, onSubmit }: ScReportDialogProp
     form.reset();
     onSubmit(data);
   }
-  const { call: post } = usePost('/screports', { onCompleted });
+  const { call: post } = usePost('/substandard-conditions', { onCompleted });
 
   const handleSubmit = (data: { description: string }) => post({ body: data })
 
